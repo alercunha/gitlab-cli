@@ -1,42 +1,23 @@
 import argparse
 import json
 
-import requests
+from gitlabcli.api import GitlabAPI
 
 import logging
 
 
-_api_url = 'https://gitlab.com/api/v4/{0}'
+def print_json(result):
+    print(json.dumps(result, indent=2))
 
 
-def _get(path, args, **kwg):
-    headers = None
-    if args.token:
-        headers = {'PRIVATE-TOKEN': args.token}
-    url = _api_url.format(path.lstrip('/'))
-    params = {k: v for k, v in kwg.items() if v is not None}
-    r = requests.get(url, headers=headers, params=params)
-    if args.verbose:
-        print('URL: {0}'.format(r.request.url))
-    return r.json()
+def commits(api: GitlabAPI, args):
+    data = api.commits(args.project, args.ref_name, args.since, args.until)
+    print_json(data)
 
 
-def repo_url(project):
-    return '/projects/{0}/repository'.format(project.replace('/', '%2F'))
-
-
-def commits(args):
-    data = _get(repo_url(args.project) + '/commits', args, ref_name=args.ref_name, since=args.since, until=args.until)
-    print(json.dumps(data, indent=2))
-
-
-def tags(args):
-    url = repo_url(args.project) + '/tags'
-    if args.name:
-        url = url + '/' + args.name
-
-    data = _get(url, args)
-    print(json.dumps(data, indent=2))
+def tags(api: GitlabAPI, args):
+    data = api.tags(args.project, args.name)
+    print_json(data)
 
 
 def main():
@@ -63,7 +44,8 @@ def main():
     args = parser.parse_args()
     if hasattr(args, 'func'):
         logging.basicConfig(level=logging.INFO)
-        args.func(args)
+        api = GitlabAPI(token=args.token, verbose=args.verbose)
+        args.func(api, args)
         exit(0)
     else:
         parser.print_usage()
