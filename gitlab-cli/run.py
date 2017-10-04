@@ -31,10 +31,11 @@ def commits(args):
 
 
 def tags(args):
-    if args.tag_name:
-        data = _get(repo_url(args.project) + '/tags/' + args.tag_name, args)
-    else:
-        data = _get(repo_url(args.project) + '/tags', args)
+    url = repo_url(args.project) + '/tags'
+    if args.name:
+        url = url + '/' + args.name
+
+    data = _get(url, args)
     print(json.dumps(data, indent=2))
 
 
@@ -56,7 +57,7 @@ def main():
 
     subparser = subparsers.add_parser('tags', help='Access tags from a repository', parents=[common_parser])
     subparser.add_argument('project', help='The project id or path (i.e. 1 or namespace/project)')
-    subparser.add_argument('--tag_name', help='The name of the tag')
+    subparser.add_argument('-n', '--name', help='The name of the tag')
     subparser.set_defaults(func=tags)
 
     args = parser.parse_args()
