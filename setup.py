@@ -11,7 +11,7 @@ setup(
     version=version,
     description='CLI tool for gitlab API',
     author='Alexandre Cunha',
-    author_email='alex@moddevices.com',
+    author_email='alexandre.cunha@gmail.com',
     license='MIT',
     packages=['gitlab-cli'],
     install_requires=[
@@ -24,5 +24,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
     ],
-    url='http://moddevices.com/',
+    url='http://github.com/alercunha/gitlab-cli',
 )
