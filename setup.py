@@ -7,7 +7,7 @@ with open('gitlabcli/__init__.py', 'r') as fh:
 
 
 setup(
-    name='gitlabcli',
+    name='gitlab-cli',
     version=version,
     description='CLI tool for gitlab API',
     author='Alexandre Cunha',
@@ -17,7 +17,7 @@ setup(
     install_requires=[
         'requests>=2.0',
     ],
-    entry_points={'console_scripts': ['gitlabcli = gitlabcli:run']},
+    entry_points={'console_scripts': ['gitlab-cli = gitlabcli.run:main']},
     classifiers=[
         'Intended Audience :: Developers',
         'Natural Language :: English',
